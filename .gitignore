@@ -1,0 +1,7 @@
+# Auto-generated, cache or build files.
+node_modules/
+dist/
+
+# Databases or others contains private data.
+database/
+.env
