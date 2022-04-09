@@ -1,3 +1,3 @@
 # MeowBot
-Original version by [猫渕喵喵](mailto:nekonyanyan1@gmail.com).
-Rewrite by [Keritial](mailto:me@krtl.top)
+Original version by [貓村幻影](https://github.com/Huanying04).  
+Rewrite by [Keritial](https://github.com/Keritial).
