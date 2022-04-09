@@ -43,7 +43,7 @@ export function apply(ctx: Context) {
 				session!.user!.hValue += gainH;
 				session?.send("妹汁真好喝！咕嘟咕嘟");
 				session?.send(`H值+${gainH}
-好感度+${gainH}`);
+好感度+${gainF}`);
 				return;
 			} else {
 				return "今天的妹汁已经喝过了吧！那就等明天再来啦！(。·ˇ_ˇ·。)";

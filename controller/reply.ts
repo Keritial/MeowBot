@@ -16,7 +16,7 @@ const dialogues: Dialogue[] = [
 	},
 	{
 		trigger: ["喵喵好啊?"],
-		answer: ["你好啊","{username}好啊"],
+		answer: ["你好啊", "{username}好啊"],
 	},
 	{
 		trigger: ["喵喵喜欢(.+)吗"],
@@ -24,7 +24,12 @@ const dialogues: Dialogue[] = [
 	},
 	{
 		trigger: ["(?:喵喵)?早啊?"],
-		answer: ["早啊喵~", "{username}你昨天晚上好棒", "哦哈哟ﾉ", "{username}你昨天晚上有很卖力呢〃∀〃"],
+		answer: [
+			"早啊喵~",
+			"{username}你昨天晚上好棒",
+			"哦哈哟ﾉ",
+			"{username}你昨天晚上有很卖力呢〃∀〃",
+		],
 	},
 	{
 		trigger: ["(?:喵喵)?晚安啊?"],
@@ -37,29 +42,28 @@ const dialogues: Dialogue[] = [
 	},
 	{
 		trigger: ["喵喵一起睡"],
-		answer: [
-			"YEAH！挤被窝(¦3ꇤ[▓▓] ヾ(≧▽≦ )3======"
-		]
+		answer: ["YEAH！挤被窝(¦3ꇤ[▓▓] ヾ(≧▽≦ )3======"],
 	},
 	{
 		trigger: ["喵喵大笨蛋"],
-		answer: [
-			"哼，{username}才是大笨蛋呢  ╯^╰"
-		]
+		answer: ["哼，{username}才是大笨蛋呢  ╯^╰"],
 	},
 	{
 		trigger: ["喵喵我爱你"],
 		answer: [
 			"{username}嗯嗯！喵喵也爱你哦owo",
-            "喵喵也爱{username}哦",
-            "讨厌啦{username}虽然人家也喜欢你~~"
-		]
+			"喵喵也爱{username}哦",
+			"讨厌啦{username}虽然人家也喜欢你~~",
+		],
 	},
 	{
 		trigger: ["来点涩图"],
 		answer: [
-			"没有那种东西，再吵就把{username}变成涩图喔\n"+segment("image", {url:"http://gchat.qpic.cn/gchatpic_new/1280056591/1021208966-2527407158-4B1863F2E0F48F9AFF14E08996B14146/0?term=2"})
-		]
+			"没有那种东西，再吵就把{username}变成涩图喔\n" +
+				segment("image", {
+					url: "http://gchat.qpic.cn/gchatpic_new/1280056591/1021208966-2527407158-4B1863F2E0F48F9AFF14E08996B14146/0?term=2",
+				}),
+		],
 	},
 ];
 
@@ -98,8 +102,9 @@ export function apply(ctx: Context) {
 				}
 			}
 		}
-		logger.info(result, answer, userDataToGet);
 		if (result && answer && typeof userDataToGet !== "undefined") {
+			logger.info(result, answer, userDataToGet);
+
 			return formatter(answer!, {
 				// 这是一个 warpper
 				...((input: string[]) => {
@@ -126,7 +131,7 @@ export function apply(ctx: Context) {
 				//			return output;
 				//	  })(session, userDataToGet)
 				//	: {}),
-					username: session.username
+				username: session.username,
 			});
 		}
 	});

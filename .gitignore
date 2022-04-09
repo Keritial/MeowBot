@@ -3,5 +3,5 @@ node_modules/
 dist/
 
 # Databases or others contains private data.
-database/
+data/
 .env
