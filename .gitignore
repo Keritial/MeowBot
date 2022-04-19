@@ -5,3 +5,4 @@ dist/
 # Databases or others contains private data.
 data/
 .env
+asset/

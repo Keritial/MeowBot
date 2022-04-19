@@ -79,8 +79,8 @@ export function apply(ctx: Context) {
 称呼　　　: ${session?.user?.nickname}
 好感度　　: ${session?.user?.favorability}
 Ｈ值　　　: ${session?.user?.hValue}
-点数　　　: ${null}
-综合评比　: ${null}
+点数　　　: ${"欸嘿，还没做呢"}
+综合评比　: ${"欸嘿，还没做呢"}
 （欲查看所持有道具可发送"我的道具"查看）`;
 		});
 }

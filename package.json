@@ -1,7 +1,9 @@
 {
   "name": "krtl-meow-bot",
   "version": "0.0.1",
-  "main": "index.js",
+  "scripts": {
+	  "start": "node -r esbuild-register ./main.ts"
+  },
   "author": "Keritial",
   "license": "Private",
   "private": true,
