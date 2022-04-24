@@ -85,7 +85,7 @@ export const dialogues: Dialogue[] = [
 称呼　　　: {nickname}
 好感度　　: {favorability}
 Ｈ值　　　: {hValue}
-点数　　　: 
+点数　　　: {point}
 综合评比　: Keritial 已经咕咕咕了${Math.trunc(
 				(new Date().getTime() - 1649408769035) / 864e5
 			)}天了

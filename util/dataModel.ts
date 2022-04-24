@@ -8,6 +8,7 @@ declare module "koishi" {
 		lastLoveDeclarationTime: number;
 		lastAiekiTime: number;
 		hValue: number;
+		point: number;
 	}
 }
 
@@ -55,6 +56,11 @@ export const ITEMS: Item[] = [
 	},
 	{
 		id: "hValue",
+		type: "integer",
+		category: ItemCategory.VALUE,
+	},
+	{
+		id: "point",
 		type: "integer",
 		category: ItemCategory.VALUE,
 	},

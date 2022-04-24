@@ -19,12 +19,12 @@ export const name = "command";
 export function apply(ctx: Context) {
 	ctx.plugin
 	ctx.command("签到")
-		.userFields(["favorability", "lastSignTime"])
+		.userFields(["favorability", "lastSignTime", "point"])
 		.action(({ session }) => {
 			if (dailyVerifier(session?.user?.lastSignTime)) {
 				const gain = generateRandomNumber(8, 11);
 				session!.user!.lastSignTime = Date.now();
-				session!.user!.favorability += gain;
+				session!.user!.point += gain;
 				return `签到成功！+${gain}点数`;
 			} else {
 				return "你今天已经签到过了，请明天再来吧！人(￣ω￣;)";
