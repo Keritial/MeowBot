@@ -34,7 +34,7 @@ export function apply(ctx: Context) {
 				break;
 			}
 			for (const trigger of dialogue.triggers) {
-				result = session.content?.match(new RegExp(trigger)) || null;
+				result = session.content?.match(trigger) || null;
 				if (result) {
 					const answers =
 						!canTrigger && dialogue.answersWhenCantTrigger
