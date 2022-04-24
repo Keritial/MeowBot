@@ -9,15 +9,17 @@ function dailyVerifier(lastTime?: number): boolean {
 	const now = moment();
 	const last = moment(lastTime);
 	return !(
-		now.year() === last.year() &&
-		now.dayOfYear() === last.dayOfYear()
+		now.year() === last.year() && now.dayOfYear() === last.dayOfYear()
 	);
 }
 
 export const name = "command";
 
 export function apply(ctx: Context) {
-	ctx.plugin
+	ctx.command("time").action(() =>
+		moment().format("YYYY.MM.DD HH:mm:ss (Z)")
+	);
+
 	ctx.command("签到")
 		.userFields(["favorability", "lastSignTime", "point"])
 		.action(({ session }) => {

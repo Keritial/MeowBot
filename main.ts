@@ -14,6 +14,10 @@ import databaseSQLite from "@koishijs/plugin-database-sqlite";
 import * as dataModel from "./util/dataModel";
 import * as command from "./controller/command";
 import * as reply from "./controller/reply";
+import * as debug from "./controller/debug";
+import * as manage from "./controller/manage";
+import * as fun from "./controller/fun";
+import * as mcCmdHelper from "./controller/mcCmdHelper";
 
 // Create a Koishi app
 const app = new Koishi({
@@ -39,6 +43,10 @@ app.plugin(databaseSQLite, {
 app.plugin(dataModel);
 app.plugin(command);
 app.plugin(reply);
+app.plugin(debug);
+app.plugin(manage);
+app.plugin(fun);
+app.plugin(mcCmdHelper);
 
 // Start running the app.
 app.start();
