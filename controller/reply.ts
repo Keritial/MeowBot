@@ -1,6 +1,7 @@
 import { Context } from "koishi";
 import { generateRandomNumber } from "../util/random";
 import { dialogues } from "../config/dialogue";
+import { User } from "koishi";
 
 export const name = "reply";
 
@@ -9,72 +10,61 @@ function formatter(
 	string: string,
 	args: { [x: string | number]: string | number }
 ): string {
+	console.log(string, args);
 	return string.replace(/{(.+?)}/g, function (match, id) {
 		return typeof args[id] !== "undefined" ? String(args[id]) : match;
 	});
 }
 
 export function apply(ctx: Context) {
-	const logger = ctx.logger("Reply");
+	const logger = ctx.logger(name);
 
 	// 我都不知道我在写什么
 	// 能跑就行（（
 	ctx.middleware(async (session) => {
 		let result: string[] | null = null;
 		let answer: string | null = null;
-		let userDataToGet: string[] | null = null;
+		let userDataToGet: (keyof User)[] | null = null;
 		for (const dialogue of dialogues) {
-			const canTrigger = dialogue.canTrigger
-				? dialogue.canTrigger()
-				: true;
-			if (canTrigger===false&&!dialogue.answersWhenCantTrigger) {
-				continue;
-			}
 			if (result) {
 				break;
 			}
 			for (const trigger of dialogue.triggers) {
 				result = session.content?.match(trigger) || null;
 				if (result) {
-					const answers =
-						!canTrigger && dialogue.answersWhenCantTrigger
-							? dialogue.answersWhenCantTrigger
-							: dialogue.answers;
+					const answers = dialogue.answers || dialogue.answer?.();
+					if (!answers) {
+						break;
+					}
 					answer = answers[generateRandomNumber(0, answers.length)];
-					userDataToGet = answer.match(/(?<={)[^\d]+(?=})/g) || [];
+					userDataToGet = (answer.match(/(?<={)[^\d]+(?=})/g) ||
+						[]) as (keyof User)[];
 					break;
 				}
 			}
 		}
 		if (result && answer && userDataToGet !== null) {
-			logger.info(result, answer, userDataToGet);
+			logger.info(
+				result,
+				answer,
+				session.username,
+				session.userId,
+				session.channelName,
+				session.channelId
+			);
 
-			return formatter(answer!, {
+			return formatter(answer, {
 				// 这是一个 warpper
-				...((input: string[]) => {
-					let output: { [x: number]: string } = {};
-					for (let i in input) {
-						output[i] = input[i];
-					}
-					return output;
-				})(result || []),
+				...(result as { [x: number]: string }),
 				// 这是另一个 warpper
-				//...(userDataToGet
-				//	? await (async (
-				//			userData,
-				//			dataToGet: string[]
-				//	  ): Promise<{ [x: string]: string | number }> => {
-				//			let output: { [x: string]: string | number } = {};
-				//			const keys = dataToGet;
-				//			let data = await userData.getUser(session.userId);
-				//			for (let key of keys) {
-				//				output[key] = (data as { [x: string]: any })[
-				//					key
-				//				];
-				//			}
-				//			return output;
-				//	  })(session, userDataToGet)
-				//	: {}),
+				...(userDataToGet
+					? await session.getUser(
+							session.userId || "",
+							userDataToGet.filter(
+								(item) => !["username"].includes(item)
+							)
+					  )
+					: {}),
 				username: session.username,
 			});
 		}

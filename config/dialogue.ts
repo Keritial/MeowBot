@@ -1,11 +1,11 @@
 import { segment } from "koishi";
+import moment from "moment";
 
 export interface Dialogue {
 	// 虽然这里是 string，但后面使用的时候会构造成正则表达式
 	triggers: RegExp[];
-	answers: string[];
-	answersWhenCantTrigger?: string[];
-	canTrigger?: () => boolean;
+	answers?: string[];
+	answer?: () => string[];
 }
 
 export const dialogues: Dialogue[] = [
@@ -23,16 +23,18 @@ export const dialogues: Dialogue[] = [
 	},
 	{
 		triggers: [/^(?:喵喵)?早啊?$/],
-		answers: [
-			"早啊喵~",
-			"{username}你昨天晚上好棒",
-			"哦哈哟ﾉ",
-			"{username}你昨天晚上有很卖力呢〃∀〃",
-		],
-		answersWhenCantTrigger: ["早你🐎呢"],
-		canTrigger: () => {
-			const nowHour = new Date().getHours();
-			return nowHour < 12 && nowHour > 4;
+		answer: () => {
+			const nowHour = moment().hour();
+			if (nowHour < 12 && nowHour > 4) {
+				return [
+					"早啊喵~",
+					"{username}你昨天晚上好棒",
+					"哦哈哟ﾉ",
+					"{username}你昨天晚上有很卖力呢〃∀〃",
+				];
+			} else {
+				return ["早你🐎呢"];
+			}
 		},
 	},
 	{
@@ -70,8 +72,24 @@ export const dialogues: Dialogue[] = [
 		],
 	},
 	{
-		triggers: [/^你好$/],
-		answers: ["你好啊，{username}！"]
-	}
-	// 学会了吗
+		triggers: [/^(?:喵喵)?(?:现在几点了?|(?:现在)?什么时候了?)/],
+		answer() {
+			return [`现在${moment().format("YYYY年M月D日，H时m分s秒")}哦！`];
+		},
+	},
+	{
+		triggers: [/^我的(?:信息|数据|统计)$/],
+		answers: [
+			`    【用户数据】    
+用户名　　: {username}
+称呼　　　: {nickname}
+好感度　　: {favorability}
+Ｈ值　　　: {hValue}
+点数　　　: 
+综合评比　: Keritial 已经咕咕咕了${Math.trunc(
+				(new Date().getTime() - 1649408769035) / 864e5
+			)}天了
+（欲查看所持有道具可发送"我的道具"查看）`,
+		],
+	},
 ];

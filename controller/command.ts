@@ -1,16 +1,16 @@
 import { Context } from "koishi";
+import moment from "moment";
 import { generateRandomNumber } from "../util/random";
 
-function timeVerifier(lastTime?: number): boolean {
+function dailyVerifier(lastTime?: number): boolean {
 	if (!lastTime) {
 		return true;
 	}
-	const now = new Date();
-	const last = new Date(lastTime);
+	const now = moment();
+	const last = moment(lastTime);
 	return !(
-		now.getFullYear() === last.getFullYear() &&
-		now.getMonth() === last.getMonth() &&
-		now.getDate() === last.getDate()
+		now.year() === last.year() &&
+		now.dayOfYear() === last.dayOfYear()
 	);
 }
 
@@ -21,7 +21,7 @@ export function apply(ctx: Context) {
 	ctx.command("签到")
 		.userFields(["favorability", "lastSignTime"])
 		.action(({ session }) => {
-			if (timeVerifier(session?.user?.lastSignTime)) {
+			if (dailyVerifier(session?.user?.lastSignTime)) {
 				const gain = generateRandomNumber(8, 11);
 				session!.user!.lastSignTime = Date.now();
 				session!.user!.favorability += gain;
@@ -33,7 +33,7 @@ export function apply(ctx: Context) {
 	ctx.command("喝妹汁")
 		.userFields(["favorability", "lastAiekiTime", "hValue"])
 		.action(({ session }) => {
-			if (timeVerifier(session?.user?.lastAiekiTime)) {
+			if (dailyVerifier(session?.user?.lastAiekiTime)) {
 				// 好感度
 				const gainF = generateRandomNumber(2, 6);
 				// H值
@@ -52,7 +52,7 @@ export function apply(ctx: Context) {
 	ctx.command("最喜欢喵喵了")
 		.userFields(["favorability", "lastLoveDeclarationTime"])
 		.action(({ session }) => {
-			if (timeVerifier(session?.user?.lastLoveDeclarationTime)) {
+			if (dailyVerifier(session?.user?.lastLoveDeclarationTime)) {
 				let gain = generateRandomNumber(-3, 4);
 				if (gain >= 0) {
 					gain++;
@@ -68,19 +68,5 @@ export function apply(ctx: Context) {
 				// 原版好像是直接 throw DoNone()，我照做（
 				return;
 			}
-		});
-
-	ctx.command("我的数据")
-		.alias("我的统计")
-		.userFields(["favorability", "nickname", "hValue"])
-		.action(({ session }) => {
-			return `    【用户数据】    
-用户名　　: ${session?.username}
-称呼　　　: ${session?.user?.nickname}
-好感度　　: ${session?.user?.favorability}
-Ｈ值　　　: ${session?.user?.hValue}
-点数　　　: ${"欸嘿，还没做呢"}
-综合评比　: ${"欸嘿，还没做呢"}
-（欲查看所持有道具可发送"我的道具"查看）`;
 		});
 }
